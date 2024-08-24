@@ -3,6 +3,10 @@ const gameArea = document.getElementById('gameArea');
 const meta = document.getElementById('meta');
 const velocidad = 10; // Velocidad de movimiento en píxeles
 
+let timer;
+let timeLeft = 60; // Puedes ajustar el tiempo según la dificultad o preferencia
+
+
 let velocidadEnemigo = 5; // Velocidad de movimiento de los enemigos
 let gameOver = false;
 
@@ -143,6 +147,7 @@ function resetGame() {
     // Eliminar enemigos existentes
     const enemigos = document.querySelectorAll('.enemigo');
     enemigos.forEach(enemigo => enemigo.remove());
+    timeLeft = 60;
 }
 
 // Generar enemigos de forma continua cada 2 segundos
@@ -151,3 +156,25 @@ setInterval(() => {
         generarEnemigo();
     }
 }, 2000);
+
+
+
+function startTimer() {
+    timer = setInterval(function() {
+        timeLeft--;
+        document.getElementById('timer').textContent = `Tiempo restante: ${timeLeft}s`;
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            endGame();
+        }
+    }, 1000);
+}
+
+// Función para terminar el juego cuando el tiempo se acaba
+function endGame() {
+    alert('¡Tiempo agotado! El juego ha terminado.');
+    gameOver = true;
+    resetGame();
+}
+
+startTimer();
