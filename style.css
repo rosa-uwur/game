@@ -117,3 +117,28 @@ body {
 #nameForm button:hover {
     background-color: #218838;
 }
+
+
+
+/* Estilo para la puntuación */
+#score {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}
+
+/* Estilo para el selector de dificultad */
+#difficulty {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}

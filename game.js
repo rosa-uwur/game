@@ -1,22 +1,18 @@
 const personaje = document.getElementById('personaje');
 const gameArea = document.getElementById('gameArea');
 const meta = document.getElementById('meta');
+const scoreElement = document.getElementById('score'); // Elemento para mostrar la puntuación
 const velocidad = 10; // Velocidad de movimiento en píxeles
 
 let timer;
 let timeLeft = 60; // Puedes ajustar el tiempo según la dificultad o preferencia
 let startGame = false;
-
 let velocidadEnemigo = 5; // Velocidad de movimiento de los enemigos
 let gameOver = false;
 let playerName = "";
-
-
+let score = 0; // Variable para la puntuación
 
 document.addEventListener('keydown', moverPersonaje);
-
-
-
 
 document.getElementById('difficulty').addEventListener('change', function() {
     var selectedValue = this.options[this.selectedIndex].value;
@@ -76,7 +72,6 @@ function moverPersonaje(event) {
             personaje.style.left = (leftPos + velocidad) + 'px';
         }
     }
-
 }
 
 // Verificar si el personaje llegó a la meta
@@ -85,7 +80,7 @@ function verificarMeta() {
     const metaPos = gameArea.offsetHeight - meta.offsetHeight;
 
     if (topPos + personaje.offsetHeight >= metaPos) {
-        alert('¡Has ganado! Llegaste al otro lado de la calle.');
+        alert(`Has ganado! Llegaste al otro lado de la calle. \n  Puntaje: ${score}`)
         resetGame();
     }
 }
@@ -99,11 +94,8 @@ function generarEnemigo() {
     img.alt = 'Descripción de la imagen'; // Opcional, para accesibilidad
     img.width = 50; // Opcional, ajustar el ancho de la imagen
     img.height = 50; // Opcional, ajustar la altura de la imagen
-    // Posición inicial del enemigo (arriba, en una posición horizontal aleatoria)
     enemigo.style.left = Math.random() * (gameArea.offsetWidth - 50) + 'px';
     enemigo.style.top = '0px';
-    enemigo.innerHTML
-    
     enemigo.appendChild(img);
 
     gameArea.appendChild(enemigo);
@@ -125,6 +117,7 @@ function moverEnemigo(enemigo) {
         if (newTopPos + enemigo.offsetHeight > gameArea.offsetHeight) {
             enemigo.remove();
             clearInterval(movimientoEnemigo);
+            updateScore(); // Actualizar la puntuación
         } else {
             enemigo.style.top = newTopPos + 'px';
         }
@@ -144,35 +137,37 @@ function verificarColision(enemigo) {
         personajeRect.top < enemigoRect.top + enemigoRect.height &&
         personajeRect.top + personajeRect.height > enemigoRect.top
     ) {
-        alert('¡Game Over! Has colisionado con un enemigo.');
+        alert(`¡Game Over! Has colisionado con un enemigo. \n  Puntaje: ${score}`);
         gameOver = true;
         resetGame();
     }
+}
+
+// Actualizar la puntuación
+function updateScore() {
+    score++;
+    scoreElement.textContent = `Puntuación: ${score}`;
 }
 
 // Función para reiniciar el juego
 function resetGame() {
     personaje.style.bottom = '0px';
     gameOver = false;
+    score = 0; // Reiniciar la puntuación
+    scoreElement.textContent = `Puntuación: ${score}`;
     // Eliminar enemigos existentes
     const enemigos = document.querySelectorAll('.enemigo');
     enemigos.forEach(enemigo => enemigo.remove());
     timeLeft = 60;
 }
 
-
-
-function iniciarJuego(){
+function iniciarJuego() {
     setInterval(() => {
         if (!gameOver) {
             generarEnemigo();
         }
     }, 2000);
 }
-
-
-
-
 
 function startTimer() {
     timer = setInterval(function() {
@@ -191,9 +186,6 @@ function endGame() {
     gameOver = true;
     resetGame();
 }
-
-
-
 
 function empezarJuego() {
     const nameForm = document.getElementById('nameForm');
