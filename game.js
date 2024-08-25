@@ -5,12 +5,16 @@ const velocidad = 10; // Velocidad de movimiento en píxeles
 
 let timer;
 let timeLeft = 60; // Puedes ajustar el tiempo según la dificultad o preferencia
-
+let startGame = false;
 
 let velocidadEnemigo = 5; // Velocidad de movimiento de los enemigos
 let gameOver = false;
+let playerName = "";
+
+
 
 document.addEventListener('keydown', moverPersonaje);
+
 
 
 
@@ -35,6 +39,12 @@ document.getElementById('difficulty').addEventListener('change', function() {
 // Mover personaje con las teclas de flechas
 function moverPersonaje(event) {
     if (gameOver) return;
+
+    if (!startGame){
+        alert('Debes ingresar tu nombre');
+        startGame = false;
+        return;
+    }
 
     let topPos = parseInt(window.getComputedStyle(personaje).getPropertyValue('bottom'));
     let leftPos = parseInt(window.getComputedStyle(personaje).getPropertyValue('left'));
@@ -150,12 +160,17 @@ function resetGame() {
     timeLeft = 60;
 }
 
-// Generar enemigos de forma continua cada 2 segundos
-setInterval(() => {
-    if (!gameOver) {
-        generarEnemigo();
-    }
-}, 2000);
+
+
+function iniciarJuego(){
+    setInterval(() => {
+        if (!gameOver) {
+            generarEnemigo();
+        }
+    }, 2000);
+}
+
+
 
 
 
@@ -177,4 +192,21 @@ function endGame() {
     resetGame();
 }
 
-startTimer();
+
+
+
+function empezarJuego() {
+    const nameForm = document.getElementById('nameForm');
+    playerName = document.getElementById('playerName').value;
+    
+    if (playerName.trim() !== "") {
+        nameForm.style.display = 'none';
+        startGame = true;
+        gameOver = false;
+        startTimer(); 
+        iniciarJuego();
+    } else {
+        alert("Por favor, ingresa tu nombre.");
+        startGame = false;
+    }
+}
